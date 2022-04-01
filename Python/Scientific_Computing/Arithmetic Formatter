@@ -1,0 +1,52 @@
+def arithmetic_arranger(problems, reveal = False):
+
+  if len(problems) > 5:
+    return "Error: Too many problems."
+
+  for i,m in enumerate(problems):
+    problems[i] = m.split()
+
+  first_row = list()
+  second_row = list()
+  third_row = list()
+  fourth_row = list()
+  empty = "    "
+
+  for problem in problems:
+
+    if problem[1] == '+':
+      try: answer = int(problem[0])+int(problem[2])
+      except: return "Error: Numbers must only contain digits."
+        
+    elif problem[1] == '-':
+      try: answer = int(problem[0])-int(problem[2])
+      except: return "Error: Numbers must only contain digits."
+
+    else: return "Error: Operator must be '+' or '-'."
+
+    a = len(problem[0])
+    b = len(problem[2])
+
+    if a > 4 or b > 4:
+      return "Error: Numbers cannot be more than four digits."
+    
+    else: 
+      greater_length = max(a,b)
+
+    first_row.append("{:>{space}}".format(problem[0],space = greater_length+2))
+    second_row.append("{:<2}".format(problem[1]))
+    second_row.append("{:>{space}}".format(problem[2],space = greater_length))
+    second_row.append(empty)
+    third_row.append("-" * (greater_length+2))
+
+    if reveal == True:
+      fourth_row.append("{:>{space}}".format(answer, space = greater_length+2))
+
+  arranged_problems = empty.join(first_row) + "\n"
+  arranged_problems = arranged_problems + "".join(second_row) + "\n"
+  arranged_problems = arranged_problems + empty.join(third_row) + "\n"
+
+  if reveal == True:
+    arranged_problems = arranged_problems + empty.join(fourth_row)
+      
+  return arranged_problems
