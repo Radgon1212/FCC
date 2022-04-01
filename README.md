@@ -1,3 +1,2 @@
-# FCC_Python_Scientific_Computing
-
+# FCC
 Personal codes submitted for Free Code Camp
