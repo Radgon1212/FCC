@@ -1,0 +1,91 @@
+class Category:
+
+  amount = 0
+  expenditure = 0
+  
+  def __init__(self, name):
+    self.name = name
+    self.ledger = list()
+
+  def __str__(self):
+    self.receipt = "{:*^30}\n".format(self.name)
+    for lines in self.ledger:
+      self.receipt += "{:<23}{:>7}\n".format(lines["description"][:23],"{:.2f}".format(lines["amount"]))
+    self.receipt += "Total: {:.2f}".format(self.get_balance())
+    return self.receipt
+    
+  def deposit(self, amount, description = ""):
+    self.amount += amount
+    self.ledger.append({"amount": amount, "description": description})
+
+  def withdraw(self, amount, description = ""):
+    if self.check_funds(amount):
+      self.amount -= amount
+      self.expenditure += amount
+      self.ledger.append({"amount": -amount, "description": description})
+      return True
+    else: return False
+
+  def get_balance(self):
+    return(self.amount)
+      
+  def transfer(self, amount, account):
+    if self.check_funds(amount):
+      self.withdraw(amount, "Transfer to {}".format(account.name))
+      Category.deposit(account, amount, "Transfer from {}".format(self.name))
+      return True
+    else: return False
+
+  def check_funds(self, amount):
+    if self.amount >= amount:
+      return True
+    else: return False
+
+#part 2 create chart
+def create_spend_chart(categories):
+  chart = list()
+  
+  title = "Percentage spent by category"
+  chart.append(title)
+
+  total_expenditure = 0
+  for category in categories:
+    total_expenditure += category.expenditure
+
+  percentage_expend = dict()
+  name_length = 0
+  i = 0
+  for category in categories:
+    percentage_expend[i] = category.name, (category.expenditure / total_expenditure) * 100
+    if len(category.name) > name_length:
+      name_length = len(category.name)
+    i += 1
+    
+  y = 100
+  while y >= 0:
+    chart_line = "{:>3}|".format(y)
+    for i in percentage_expend:
+      if percentage_expend[i][1] >= y:
+        chart_line += " o "
+      else: chart_line += "   "
+    chart_line += " "
+    chart.append(chart_line)
+    y -= 10
+
+  chart_line = "    " #4 space
+  for i in percentage_expend:
+    chart_line += "---"
+  chart_line += "-"
+  chart.append(chart_line)
+
+  j = 0
+  while j < name_length:
+    chart_line = "    " #4 space
+    for i in percentage_expend:
+      try: chart_line += " {} ".format(percentage_expend[i][0][j])
+      except: chart_line += "   "
+    chart_line += " "
+    chart.append(chart_line)
+    j += 1
+    
+  return "\n".join(chart)
