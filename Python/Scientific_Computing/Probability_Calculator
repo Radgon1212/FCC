@@ -1,0 +1,47 @@
+import copy
+import random
+# Consider using the modules imported above.
+
+class Hat:
+
+  def __init__(self, **balls):
+    self.contents = list()
+    self.drawn_balls = list()
+    for color, number in balls.items():
+      for n in range(number):
+        self.contents.append(color)
+
+  def draw(self, draw_number):
+    self.draw_number = draw_number
+    
+    if self.draw_number >= len(self.contents):
+      self.drawn_balls = list(self.contents)
+      self.contents.clear()
+
+    else:
+      for x in range(self.draw_number):
+        y = len(self.contents)-1
+        z = random.randint(0,y)
+        self.drawn_balls.append(self.contents.pop(z))
+    
+    return self.drawn_balls
+  
+def experiment(hat, expected_balls, num_balls_drawn, num_experiments):
+  
+  M = 0
+  N = num_experiments
+  S = len(expected_balls)
+  
+  
+  for i in range(N):
+    s = 0
+    drawn_balls = copy.deepcopy(hat).draw(num_balls_drawn)
+    
+    for color, number in expected_balls.items():
+      if drawn_balls.count(color) >= number:
+        s += 1
+    
+    if s == S:
+      M += 1
+  
+  return M/N
