@@ -1,0 +1,42 @@
+import numpy as np
+
+def calculate(list):
+
+  calculations = dict()
+  
+  if len(list) != 9:
+    raise ValueError("List must contain nine numbers.")
+
+  a = np.array(list).reshape(3,3)
+
+  mean = []
+  variance = []
+  std_dev = []
+  max = []
+  min = []
+  sum = []
+  
+  for i in range(2):
+    
+    mean.append(a.mean(axis = i).tolist())
+    variance.append(a.var(axis = i).tolist())
+    std_dev.append(a.std(axis = i).tolist())
+    max.append(a.max(axis = i).tolist())
+    min.append(a.min(axis = i).tolist())
+    sum.append(a.sum(axis = i).tolist())
+
+  mean.append(a.flatten().mean().tolist())
+  variance.append(a.flatten().var().tolist())
+  std_dev.append(a.flatten().std().tolist())
+  max.append(a.flatten().max().tolist())
+  min.append(a.flatten().min().tolist())
+  sum.append(a.flatten().sum().tolist())
+
+  calculations['mean'] = mean
+  calculations['variance'] = variance
+  calculations['standard deviation'] = std_dev
+  calculations['max'] = max
+  calculations['min'] = min
+  calculations['sum'] = sum
+  
+  return calculations
